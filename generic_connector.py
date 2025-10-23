@@ -78,15 +78,15 @@ class VolumeOSC():
 					if ntrials > 1000:
 						raise liblo.ServerError(99, "stop searching free port", None)
 
-			self.server_a.add_method("/net/mhcloud/volume/" + instance + "/master", "f", self.callback_master_gain_a)
-			self.server_a.add_method("/net/mhcloud/volume/" + instance + "/master/mute", "i", self.callback_master_mute_a)
-			self.server_b.add_method("/net/mhcloud/volume/" + instance + "/master", "f", self.callback_master_gain_b)
-			self.server_b.add_method("/net/mhcloud/volume/" + instance + "/master/mute", "i", self.callback_master_mute_b)
-			for i in range(channels):
-				self.server_a.add_method("/net/mhcloud/volume/" + instance + "/" + str(i), "f", self.callback_channel_gain_a, i)
-				self.server_a.add_method("/net/mhcloud/volume/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute_a, i)
-				self.server_b.add_method("/net/mhcloud/volume/" + instance + "/" + str(i), "f", self.callback_channel_gain_b, i)
-				self.server_b.add_method("/net/mhcloud/volume/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute_b, i)
+		self.server_a.add_method("/audiomixer/" + instance + "/master", "f", self.callback_master_gain_a)
+		self.server_a.add_method("/audiomixer/" + instance + "/master/mute", "i", self.callback_master_mute_a)
+		self.server_b.add_method("/audiomixer/" + instance + "/master", "f", self.callback_master_gain_b)
+		self.server_b.add_method("/audiomixer/" + instance + "/master/mute", "i", self.callback_master_mute_b)
+		for i in range(channels):
+			self.server_a.add_method("/audiomixer/" + instance + "/" + str(i), "f", self.callback_channel_gain_a, i)
+			self.server_a.add_method("/audiomixer/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute_a, i)
+			self.server_b.add_method("/audiomixer/" + instance + "/" + str(i), "f", self.callback_channel_gain_b, i)
+			self.server_b.add_method("/audiomixer/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute_b, i)
 			self.server_active = True
 		except liblo.ServerError, err:
 			sys.stderr.write("OSC server error occured:\n")
@@ -104,11 +104,11 @@ class VolumeOSC():
 		val = max(0.0, val)
 		val = min(1.0, val)
 		coeff = db_to_coeff(fader_to_db(val))
-		liblo.send(self.address_b, "/net/mhcloud/volume/" + instance + "/master", coeff)
+		liblo.send(self.address_b, "/audiomixer/" + instance + "/master", coeff)
 
 	def callback_master_mute_a(self, path, args):
 		mute = int(args[0]!=0)
-		liblo.send(self.address_b, "/net/mhcloud/volume/" + instance + "/master/mute", mute)
+		liblo.send(self.address_b, "/audiomixer/" + instance + "/master/mute", mute)
 
 	def callback_channel_gain_a(self, path, args, types, src, data):
 		val = float(args[0])
@@ -116,33 +116,33 @@ class VolumeOSC():
 		val = min(1.0, val)
 		coeff = db_to_coeff(fader_to_db(val))
 		channel = data
-		liblo.send(self.address_b, "/net/mhcloud/volume/" + instance + "/" + str(channel), coeff)
+		liblo.send(self.address_b, "/audiomixer/" + instance + "/" + str(channel), coeff)
 
 	def callback_channel_mute_a(self, path, args, types, src, data):
 		mute = int(args[0]!=0)
 		channel = data
-		liblo.send(self.address_b, "/net/mhcloud/volume/" + instance + "/" + str(channel) + "/mute", int(mute))
+		liblo.send(self.address_b, "/audiomixer/" + instance + "/" + str(channel) + "/mute", int(mute))
 
 
 	def callback_master_gain_b(self, path, args):
 		val = float(args[0])
 		fader = db_to_fader(coeff_to_db(val))
-		liblo.send(self.address_a, "/net/mhcloud/volume/" + instance + "/master", fader)
+		liblo.send(self.address_a, "/audiomixer/" + instance + "/master", fader)
 
 	def callback_master_mute_b(self, path, args):
 		mute = int(args[0]!=0)
-		liblo.send(self.address_a, "/net/mhcloud/volume/" + instance + "/master/mute", int(mute))
+		liblo.send(self.address_a, "/audiomixer/" + instance + "/master/mute", int(mute))
 
 	def callback_channel_gain_b(self, path, args, types, src, data):
 		val = float(args[0])
 		fader = db_to_fader(coeff_to_db(val))
 		channel = data
-		liblo.send(self.address_a, "/net/mhcloud/volume/" + instance + "/" + str(channel), fader)
+		liblo.send(self.address_a, "/audiomixer/" + instance + "/" + str(channel), fader)
 
 	def callback_channel_mute_b(self, path, args, types, src, data):
 		mute = int(args[0]!=0)
 		channel = data
-		liblo.send(self.address_a, "/net/mhcloud/volume/" + instance + "/" + str(channel) + "/mute", int(mute))
+		liblo.send(self.address_a, "/audiomixer/" + instance + "/" + str(channel) + "/mute", int(mute))
 
 
 

@@ -91,19 +91,19 @@ class VolumeOSC():
 				try:
 					self.server = liblo.Server(local_port)
 					searching_port = False
-				except liblo.ServerError, err:
+				except liblo.ServerError as err:
 					local_port = local_port + 1
 					ntrials = ntrials + 1
 					if ntrials > 1000:
 						raise liblo.ServerError(99, "stop searching free port", None)
 
-			self.server.add_method("/net/mhcloud/volume/" + instance + "/master", "f", self.callback_master_gain)
-			self.server.add_method("/net/mhcloud/volume/" + instance + "/master/mute", "i", self.callback_master_mute)
-			for i in range(channels):
-				self.server.add_method("/net/mhcloud/volume/" + instance + "/" + str(i), "f", self.callback_channel_gain, i)
-				self.server.add_method("/net/mhcloud/volume/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute, i)
+		self.server.add_method("/audiomixer/" + instance + "/master", "f", self.callback_master_gain)
+		self.server.add_method("/audiomixer/" + instance + "/master/mute", "i", self.callback_master_mute)
+		for i in range(channels):
+			self.server.add_method("/audiomixer/" + instance + "/" + str(i), "f", self.callback_channel_gain, i)
+			self.server.add_method("/audiomixer/" + instance + "/" + str(i) + "/mute", "i", self.callback_channel_mute, i)
 			self.server_active = True
-		except liblo.ServerError, err:
+		except liblo.ServerError as err:
 			sys.stderr.write("OSC server error occured:\n")
 			sys.stderr.write(str(err) + '\n')
 
@@ -132,25 +132,25 @@ class VolumeOSC():
 		gtk.threads_leave()
 
 	def send_master(self, val):
-		liblo.send(self.address, "/net/mhcloud/volume/" + instance + "/master", val)
+		liblo.send(self.address, "/audiomixer/" + instance + "/master", val)
 
 	def send_channel(self, channel, val):
-		liblo.send(self.address, "/net/mhcloud/volume/" + instance + "/" + str(channel), val)
+		liblo.send(self.address, "/audiomixer/" + instance + "/" + str(channel), val)
 
 	def send_master_mute(self, mute):
-		liblo.send(self.address, "/net/mhcloud/volume/" + instance + "/master/mute", int(mute))
+		liblo.send(self.address, "/audiomixer/" + instance + "/master/mute", int(mute))
 
 	def send_channel_mute(self, channel, mute):
-		liblo.send(self.address, "/net/mhcloud/volume/" + instance + "/" + str(channel) + "/mute", int(mute))
+		liblo.send(self.address, "/audiomixer/" + instance + "/" + str(channel) + "/mute", int(mute))
 
 class VolumeConnector:
 
-	def delete_event(self, widget, event, data=None):
-		print "delete event occurred"
+	def delete_event(self, _widget, _event, _data=None):
+		print("delete event occurred")
 		return False
 
-	def destroy(self, widget, data=None):
-		print "destroy signal occurred"
+	def destroy(self, _widget, _data=None):
+		print("destroy signal occurred")
 		gtk.main_quit()
 
 	def send_master_osc(self, value):
@@ -255,7 +255,7 @@ class VolumeConnector:
 		self.lock = threading.Lock()
 		self.osc = VolumeOSC(self, host, port, instance, external_instance, local_port)
 		self.nchannels = nchannels
-		print "channels=" + str(self.nchannels)
+		print("channels=" + str(self.nchannels))
 
 		if self.nchannels == 1:
 			self.nchannels = 0

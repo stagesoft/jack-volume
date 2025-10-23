@@ -352,11 +352,11 @@ int main(int argc, char** argv) {
 	InetTCPMaster tcpMaster;
 	InetUDPMaster udpMaster;
 	VolumeCallable<pa_volume> volume_call(volume);
-	nspace.add("/net/mhcloud/volume/" + std::string(client_name) + "/master", &volume_call);
-	nspace.add("/net/mhcloud/volume/" + std::string(client_name) + "/master/mute", &volume_call);
+	nspace.add("/audiomixer/" + std::string(client_name) + "/master", &volume_call);
+	nspace.add("/audiomixer/" + std::string(client_name) + "/master/mute", &volume_call);
 	for (int i=0; i<num_channels; i++) {
-		nspace.add("/net/mhcloud/volume/" + std::string(client_name) + "/" + std::to_string(i), &volume_call);
-		nspace.add("/net/mhcloud/volume/" + std::string(client_name) + "/" + std::to_string(i) + "/mute", &volume_call);
+		nspace.add("/audiomixer/" + std::string(client_name) + "/" + std::to_string(i), &volume_call);
+		nspace.add("/audiomixer/" + std::string(client_name) + "/" + std::to_string(i) + "/mute", &volume_call);
 	}
 	processor.setNamespace(&nspace);
 	tcpMaster.setProcessor(&processor);
