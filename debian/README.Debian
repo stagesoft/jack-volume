@@ -1,0 +1,40 @@
+cuems-jack-volume for Debian
+=============================
+
+Build Dependencies
+------------------
+
+This package requires libOSC++ (https://github.com/voidseg/libOSCpp) to be 
+installed before building. This is a custom OSC library that must be 
+installed to /usr/local/lib/libOSC++.a
+
+To install libOSC++ manually:
+  $ git clone https://github.com/voidseg/libOSCpp
+  $ cd libOSCpp
+  $ ./configure
+  $ make
+  $ sudo make install
+
+Alternatively, if available, install the cuems-liboscpp-dev package.
+
+Usage
+-----
+
+This package provides several utilities:
+
+* jack-volume: JACK audio volume control daemon
+  Example: jack-volume -c jack-mixer -n 8 -p 7600
+
+* pa-volume: PulseAudio volume control daemon
+  Example: pa-volume -c pa-mixer -n 4 -p 7600
+
+* jvctl: GTK3 GUI for manual volume control
+  Example: jvctl -c 8 -h localhost -p 7600
+
+* udp_dispatcher: UDP packet dispatcher for OSC
+  Example: udp_dispatcher -p 7600
+
+* generic_connector: OSC protocol bridge between two hosts
+  Example: generic_connector -h host1 -p 7600 -g host2
+
+ -- Ion Reguera <ion@stagelab.coop>  Tue, 20 Jan 2026 00:00:00 +0000

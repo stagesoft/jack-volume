@@ -1,0 +1,33 @@
+Source: cuems-jack-volume
+Section: sound
+Priority: optional
+Maintainer: Ion Reguera <ion@stagelab.coop>
+Build-Depends: debhelper-compat (= 13),
+               libjack-jackd2-dev | libjack-dev,
+               libpulse-dev,
+               pkg-config
+# Note: Also requires libOSC++ from https://github.com/voidseg/libOSCpp
+# installed to /usr/local/lib/libOSC++.a (not in Debian repos)
+Standards-Version: 4.6.0
+Homepage: https://github.com/voidseg/jack-volume
+
+Package: cuems-jack-volume
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         python3,
+         python3-gi,
+         gir1.2-gtk-3.0,
+         python3-liblo
+Description: JACK/PulseAudio volume control via OSC for CUEMS
+ jack-volume is a JACK and PulseAudio client for controlling audio volume
+ of multiple channels via OSC (Open Sound Control).
+ .
+ This package provides:
+  - jack-volume: JACK audio volume control daemon
+  - pa-volume: PulseAudio volume control daemon
+  - jvctl: GTK3 GUI for manual volume control
+  - udp_dispatcher: UDP packet dispatcher for OSC
+  - generic_connector: OSC protocol bridge
+ .
+ Part of the CUEMS (Cue Management System) audio infrastructure.

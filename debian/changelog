@@ -1,0 +1,8 @@
+cuems-jack-volume (0.1.0-1) unstable; urgency=medium
+
+  * Initial release for CUEMS system
+  * JACK and PulseAudio volume control via OSC
+  * Includes jvctl GUI control interface
+  * OSC dispatcher and connector utilities
+
+ -- Ion Reguera <ion@stagelab.coop>  Tue, 20 Jan 2026 00:00:00 +0000

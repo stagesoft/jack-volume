@@ -1,0 +1,33 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+export DEB_CFLAGS_MAINT_APPEND  = -Wall -pedantic
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Build using the existing Makefile
+	$(MAKE) CXXFLAGS="$(CXXFLAGS) $(CPPFLAGS)" LIBS="$(LDFLAGS) `pkg-config --libs jack` `pkg-config --libs libpulse` -pthread"
+
+override_dh_auto_install:
+	# Install binaries
+	install -d $(CURDIR)/debian/cuems-jack-volume/usr/bin
+	install -m 755 jack-volume $(CURDIR)/debian/cuems-jack-volume/usr/bin/
+	install -m 755 pa-volume $(CURDIR)/debian/cuems-jack-volume/usr/bin/
+	install -m 755 jvctl.py $(CURDIR)/debian/cuems-jack-volume/usr/bin/jvctl
+	install -m 755 udp_dispatcher.py $(CURDIR)/debian/cuems-jack-volume/usr/bin/udp_dispatcher
+	install -m 755 generic_connector.py $(CURDIR)/debian/cuems-jack-volume/usr/bin/generic_connector
+	install -m 755 general_connector.py $(CURDIR)/debian/cuems-jack-volume/usr/bin/general_connector
+	# Install documentation
+	install -d $(CURDIR)/debian/cuems-jack-volume/usr/share/doc/cuems-jack-volume
+	install -m 644 README.md $(CURDIR)/debian/cuems-jack-volume/usr/share/doc/cuems-jack-volume/
+
+override_dh_auto_clean:
+	$(MAKE) clean || true
+	dh_auto_clean
