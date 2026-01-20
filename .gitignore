@@ -1,3 +1,19 @@
+# Build artifacts
 *.o
 jack-volume
 pa-volume
+
+# Debian packaging artifacts
+debian/cuems-jack-volume/
+debian/.debhelper/
+debian/debhelper-build-stamp
+debian/files
+debian/*.substvars
+debian/*.debhelper
+debian/*.log
+
+# Generated packages (in parent directory)
+../*.deb
+../*.ddeb
+../*.buildinfo
+../*.changes

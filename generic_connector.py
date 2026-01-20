@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import getopt
 import sys
@@ -61,7 +61,7 @@ class VolumeOSC():
 				try:
 					self.server_a = liblo.Server(local_port_a)
 					searching_port = False
-				except liblo.ServerError, err:
+				except liblo.ServerError as err:
 					local_port_a = local_port_a + 1
 					ntrials = ntrials + 1
 					if ntrials > 1000:
@@ -72,7 +72,7 @@ class VolumeOSC():
 				try:
 					self.server_b = liblo.Server(local_port_b)
 					searching_port = False
-				except liblo.ServerError, err:
+				except liblo.ServerError as err:
 					local_port_b = local_port_b + 1
 					ntrials = ntrials + 1
 					if ntrials > 1000:

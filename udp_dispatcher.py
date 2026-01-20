@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 import getopt
 import sys
@@ -24,19 +24,19 @@ class Host:
 
 class Dispatcher:
 	def __init__(self, port, dst_hosts):
-		print "listen port=" + str(port)
+		print("listen port=" + str(port))
 		self.port = port
 		self.hosts = dst_hosts
 		for h in dst_hosts:
-			print "dst_host=" + h[0] + " port=" + str(h[1])
+			print("dst_host=" + h[0] + " port=" + str(h[1]))
 
 	def run(self):
 		s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 		try:
 			self.bind = ('', self.port)
 			s.bind(self.bind)
-		except socket.error, err:
-			print "Couldn't bind server on %r" % (self.bind, )
+		except socket.error as err:
+			print("Couldn't bind server on %r" % (self.bind, ))
 			sys.exit(1)
 		while True:
 			try:
@@ -47,7 +47,7 @@ class Dispatcher:
 				break
 #			print "packet received from: " + str(addr)
 			if not addr in hosts:
-				print "add new host: " + str(addr)
+				print("add new host: " + str(addr))
 				hosts.append(addr)
 			for h in hosts:
 				if h != addr:
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 			prt = int(tokens[1])
 			if prt < 0 or prt >= pow(2, 16):
 				raise ValueError("invalid port number %d" % (prt))
-		except ValueError, err:
+		except ValueError as err:
 			sys.stderr.write("malformed host line: " + line)
 			sys.stderr.write(str(err) + '\n')
 			continue

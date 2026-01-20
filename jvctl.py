@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 #import pygtk
 #pygtk.require('2.0')
@@ -96,7 +96,7 @@ class VolumeOSC(threading.Thread):
 				try:
 					self.server = liblo.Server(local_port)
 					searching_port = False
-				except liblo.ServerError, err:
+				except liblo.ServerError as err:
 					local_port = local_port + 1
 					ntrials = ntrials + 1
 					if ntrials > 1000:
@@ -151,11 +151,11 @@ class VolumeOSC(threading.Thread):
 class VolumeGUI:
 
 	def delete_event(self, widget, event, data=None):
-		print "delete event occurred"
+		print("delete event occurred")
 		return False
 
 	def destroy(self, widget, data=None):
-		print "destroy signal occurred"
+		print("destroy signal occurred")
 		Gtk.main_quit()
 
 	def send_master_osc(self, value):
@@ -273,7 +273,7 @@ class VolumeGUI:
 		self.osc = VolumeOSC(self, host, port, protocol, instance, local_port)
 		self.osc.start()
 		self.nchannels = nchannels
-		print "channels=" + str(self.nchannels)
+		print("channels=" + str(self.nchannels))
 
 		if self.nchannels == 1:
 			self.nchannels = 0
